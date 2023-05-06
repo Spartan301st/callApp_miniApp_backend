@@ -72,8 +72,37 @@ exports.deleteUserData = (req, res) => {
         res.status(500).send("Error writing file");
         return;
       }
-
       res.status(200).send(dataWithRemovedUser);
+    });
+  });
+};
+exports.updateUserData = (req, res) => {
+  const updatedUserData = req.body;
+  const finalUpdatedDataToWrite = {
+    id: updatedUserData.id,
+    name: updatedUserData.name,
+    email: updatedUserData.email,
+    gender: updatedUserData.gender,
+    address: { street: updatedUserData.street, city: updatedUserData.city },
+    phone: updatedUserData.phone,
+  };
+  // all users data
+  fs.readFile("data.json", (err, fileData) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error reading file");
+      return;
+    }
+    const json = JSON.parse(fileData);
+    json[finalUpdatedDataToWrite.id - 1] = finalUpdatedDataToWrite;
+    // save new updated data
+    fs.writeFile("data.json", JSON.stringify(json), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Error writing file");
+        return;
+      }
+      res.status(200).send(json);
     });
   });
 };
