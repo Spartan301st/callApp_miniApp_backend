@@ -1,7 +1,6 @@
 const fs = require("fs");
 
 exports.getUsersData = (req, res) => {
-  // fs.readFile("data.json", (err, data) => {
   fs.readFile("data.json", (err, data) => {
     if (err) {
       console.error(err);
@@ -15,7 +14,6 @@ exports.getUsersData = (req, res) => {
 exports.putUserData = (req, res) => {
   // new users data
   const values = req.body;
-  console.log("values", values);
 
   // all users data
   fs.readFile("data.json", (err, fileData) => {
@@ -47,8 +45,6 @@ exports.putUserData = (req, res) => {
         res.status(500).send("Error writing file");
         return;
       }
-
-      // res.send("Data written to file");
       res.status(200).send(json);
     });
   });
